@@ -2,6 +2,7 @@ package com.diamssword.labbyrinth.view.components;
 
 import com.diamssword.labbyrinth.downloaders.Utils;
 import com.diamssword.labbyrinth.utils.KeyPair;
+import com.diamssword.labbyrinth.view.ConsoleGui;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
@@ -30,6 +31,11 @@ public class MenuBar extends JPanel {
         this.add(new JLabel("Mémoire allouée"),"bottom");
         this.add(ramSlider=new JSlider(1,getRam(),val),"w 90%,top");
         this.add(sliderText=new JLabel(val+"G"),"cell 0 2, w 10%,wrap,top");
+        JButton consoleBt;
+        this.add(consoleBt=new JButton("Console"));
+        consoleBt.addActionListener((l)->{
+            ConsoleGui.create();
+        });
 
         ramSlider.addChangeListener(l->{
             sliderText.setText(ramSlider.getValue()+"G");

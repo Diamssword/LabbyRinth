@@ -1,6 +1,7 @@
 package com.diamssword.labbyrinth;
 
 import com.diamssword.labbyrinth.downloaders.Utils;
+import com.diamssword.labbyrinth.view.ConsoleGui;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
@@ -82,10 +83,10 @@ public class GameInstance {
             cmd.add("\""+user+"\"");
 
             System.out.println("Running :" + Arrays.toString(cmd.toArray()));
-            ProcessBuilder builder = new ProcessBuilder(cmd).redirectErrorStream(true);
-            builder.inheritIO();
+            ProcessBuilder builder = new ProcessBuilder(cmd);//.redirectErrorStream(true);
+        //    builder.inheritIO();
             Process process=builder.start();
-
+            ConsoleGui.pipeOutput(process.getInputStream(),process.getErrorStream());
             process.getOutputStream().close();
             process.waitFor();
 

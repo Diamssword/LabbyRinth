@@ -1,5 +1,7 @@
 package com.diamssword.labbyrinth.downloaders;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -57,15 +59,7 @@ public class FileDownloader {
 
 		downloadFile(urli, outFile,(i)->{});
 	}
-	/**
-	 * Downloads a file from a given url and writes it to a given File object
-	 *
-	 * @param urli
-	 *            Input file url
-	 * @param outputFile
-	 *            The output file to write to
-	 *
-	 */
+
 	public static boolean streamToFile(InputStream inputStream, File outputFile, Consumer<Integer> percentage) throws IOException, MalformedURLException {
 		// Get a connection to the URL and start up a buffered reader.
 		int total=inputStream.available();
@@ -91,7 +85,6 @@ public class FileDownloader {
 		int total=inputStream.available();
         byte[] buffer = new byte[153600];
 		int bytesRead = 0;
-
 		while ((bytesRead = inputStream.read(buffer)) > 0) {
 			output.write(buffer, 0, bytesRead);
 		}
