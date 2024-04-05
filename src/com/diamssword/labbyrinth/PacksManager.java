@@ -25,9 +25,9 @@ public class PacksManager {
     {
         return isLocked;
     }
-    private static List<Consumer<List<PackInstance>>> readyListeners=new ArrayList<>();
+    private static final List<Consumer<List<PackInstance>>> readyListeners=new ArrayList<>();
     private static Vector<KeyPair> packsDisplay=new Vector<>();
-    private static List<Consumer<Boolean>> updatedListeners=new ArrayList<>();
+    private static final List<Consumer<Boolean>> updatedListeners=new ArrayList<>();
     public static void load() {
         JSONObject cache = Utils.readCommonCache();
         if (cache.has("packs")) {

@@ -2,6 +2,7 @@ package com.diamssword.labbyrinth;
 
 import com.diamssword.labbyrinth.downloaders.Utils;
 import org.jetbrains.annotations.Nullable;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -70,7 +71,10 @@ public class GameInstance {
             cmd.add(new File(LauncherVariables.gameDirectory,"packs/"+this.packDirectory).getAbsolutePath());
             cmd.add("--output");
             cmd.add("human-color");
-            int ram=Math.max(1,Utils.readCommonCache().getInt("ram"));
+            var ram=4;
+            JSONObject ob=Utils.readCommonCache();
+            if(ob.has("ram"))
+                Math.max(1,Utils.readCommonCache().getInt("ram"));
             cmd.add("start");
             cmd.add("--jvm-args=\"-Xmx"+ram+"G\"");
             cmd.add(getVersionCmd());

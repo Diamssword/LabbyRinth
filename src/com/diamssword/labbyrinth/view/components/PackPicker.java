@@ -19,6 +19,7 @@ public class PackPicker extends JPanel {
     JButton addBt;
     JComboBox<KeyPair> selector;
     static ImageIcon STEVE;
+    private boolean ready=false;
     public PackPicker()
     {
         STEVE=new ImageIcon(PackPicker.class.getResource("/images/logo_gray.png"));
@@ -32,7 +33,7 @@ public class PackPicker extends JPanel {
      //   addBt.addActionListener(e->addAccount());
 
         selector.addActionListener(e -> {
-            if(e.getActionCommand().equals("comboBoxChanged"))
+            if(e.getActionCommand().equals("comboBoxChanged") && ready)
             {
                 String id=((KeyPair)selector.getSelectedItem()).getKey();
                 PacksManager.setPreferedPack(id);
@@ -41,7 +42,7 @@ public class PackPicker extends JPanel {
         });
         PacksManager.addUpdatedListener(locked->{
             selector.setEnabled(!locked);
-            if(!locked)
+            if(!locked && ready)
             {
                 selectUser(PacksManager.getPreferedPack());
                 selector.setSelectedItem(PacksManager.getSelectedDisplay());
@@ -50,7 +51,7 @@ public class PackPicker extends JPanel {
         });
 
         PacksManager.addReadyListener((packs)->{
-
+            ready=true;
             selector.setRenderer(new PairRenderer());
             selector.setModel(new DefaultComboBoxModel<>(PacksManager.getDisplayList()));
             String s=PacksManager.getPreferedPack();
