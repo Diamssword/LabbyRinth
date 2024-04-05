@@ -41,16 +41,22 @@ public class PackPicker extends JPanel {
         });
         PacksManager.addUpdatedListener(locked->{
             selector.setEnabled(!locked);
+            if(!locked)
+            {
+                selectUser(PacksManager.getPreferedPack());
+                selector.setSelectedItem(PacksManager.getSelectedDisplay());
+            }
+
         });
 
         PacksManager.addReadyListener((packs)->{
-            Vector<KeyPair> vec=new Vector<>(packs.stream().map(v->new KeyPair(v.name(), TextUtils.capitalizeWords(v.name().replaceAll("-"," ").replaceAll("_"," ")))).toList());
+
             selector.setRenderer(new PairRenderer());
-            selector.setModel(new DefaultComboBoxModel<>(vec));
+            selector.setModel(new DefaultComboBoxModel<>(PacksManager.getDisplayList()));
             String s=PacksManager.getPreferedPack();
             if(s!=null)
             {
-                selector.setSelectedItem(vec.stream().filter(v->v.getKey().equals(s)).findFirst().get());
+                selector.setSelectedItem(PacksManager.getSelectedDisplay());
                 selectUser(s);
             }
         });

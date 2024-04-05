@@ -5,6 +5,7 @@ import com.diamssword.labbyrinth.downloaders.Utils;
 import com.diamssword.labbyrinth.downloaders.VersionChecker;
 import com.diamssword.labbyrinth.logger.Log;
 import com.diamssword.labbyrinth.utils.KeyPair;
+import com.diamssword.labbyrinth.utils.TextUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
@@ -24,6 +26,7 @@ public class PacksManager {
         return isLocked;
     }
     private static List<Consumer<List<PackInstance>>> readyListeners=new ArrayList<>();
+    private static Vector<KeyPair> packsDisplay=new Vector<>();
     private static List<Consumer<Boolean>> updatedListeners=new ArrayList<>();
     public static void load() {
         JSONObject cache = Utils.readCommonCache();
@@ -48,9 +51,18 @@ public class PacksManager {
             }
 
         }
+        packsDisplay=new Vector<KeyPair>(packs.stream().map(v->new KeyPair(v.name, TextUtils.capitalizeWords(v.name().replaceAll("-"," ").replaceAll("_"," ")))).toList());
         readyListeners.forEach(c->{
             c.accept(packs);
         });
+    }
+    public static Vector<KeyPair> getDisplayList()
+    {
+        return packsDisplay;
+    }
+    public static KeyPair getSelectedDisplay()
+    {
+        return packsDisplay.stream().filter(v->v.getKey().equals(getPreferedPack())).findFirst().orElse(packsDisplay.get(0));
     }
     public static void addReadyListener(Consumer<List<PackInstance>> list)
     {
@@ -97,6 +109,9 @@ public class PacksManager {
                 try {
                     MrpackReader reader=prepareUpdate(p);
                     reader.updateOrInstall(p.name, p.latest.getKey());
+                    packs.remove(p);
+                    packs.add(new PackInstance(p.name,p.latest.getKey(),p.latest,false));
+
                     isLocked=false;
                     updatedListeners.forEach(c->c.accept(isLocked));
                     reader.file.delete();
