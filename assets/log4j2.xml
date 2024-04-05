@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="WARN">
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <Routing name="Routing">
+        <Routes pattern="$${sys:log4jLauncherRoot}">
+            <Route>
+                <File name="File" fileName="${sys:log4jLauncherRoot}">
+                    <PatternLayout pattern="%d{yyyy-mm-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
+                </File>
+            </Route>
+        </Routes>
+        </Routing>
+    </appenders>
+
+    <loggers>
+        <root level="debug">
+            <appender-ref ref="Console" level="info"/>
+            <appender-ref ref="Routing" level="warn"/>
+        </root>
+    </loggers>
+</configuration>

@@ -1,0 +1,6 @@
+cloner le repo: https://github.com/mindstorm38/portablemc
+installer pip si besoin
+utiliser pyinstaller: https://pyinstaller.org/en/stable/usage.html#options
+commande pour build le point d'entrer en 1 seul .exe:  pyinstaller .\portablemc\__main__.py -F
+Pour build une distro Linux, il faut faire la même manip sur linux
+le résultat ce retrouver dans un dossier "dist" au même niveau que la commande

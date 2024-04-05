@@ -1,0 +1,16 @@
+{
+  "name": "node_server",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A small node server to distribut LabbyRinth files and updates",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Diamssword",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^4.26.2",
+    "semver-parser": "^4.1.6"
+  }
+}
