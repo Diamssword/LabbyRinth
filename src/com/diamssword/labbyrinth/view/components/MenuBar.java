@@ -4,6 +4,7 @@ import com.diamssword.labbyrinth.downloaders.Utils;
 import com.diamssword.labbyrinth.utils.KeyPair;
 import net.miginfocom.swing.MigLayout;
 import org.apache.commons.io.FileUtils;
+import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +17,10 @@ public class MenuBar extends JPanel {
     public MenuBar()
     {
         super();
-        int val= Utils.readCommonCache().getInt("ram");
+        int val=0;
+        JSONObject ob=Utils.readCommonCache();
+        if(ob.has("ram"))
+         val= Utils.readCommonCache().getInt("ram");
         if(val<1)
             val=4;
         this.setOpaque(false);

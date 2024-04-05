@@ -11,14 +11,14 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/miglayout-swing-11.2-20230430.082151-1.jar!/" />
+          <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/annotations/24.0.0/annotations-24.0.0.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/libs/miglayout-swing-11.2-20230430.082151-1-sources.jar!/" />
-        </SOURCES>
+        <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="commons.io" level="project" />
+    <orderEntry type="library" name="json" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -28,16 +28,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/libs/miglayout-core-11.2-20230430.082151-1.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="library" name="commons.io" level="project" />
-    <orderEntry type="library" name="json" level="project" />
+    <orderEntry type="library" name="miglayout.swing" level="project" />
   </component>
 </module>
