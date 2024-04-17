@@ -6,6 +6,8 @@ import com.diamssword.labbyrinth.logger.Log;
 import com.diamssword.labbyrinth.utils.KeyPair;
 import com.diamssword.labbyrinth.view.MainGui;
 import com.diamssword.labbyrinth.view.SplashGui;
+import com.diamssword.labbyrinth.view.browser.HelloWorld;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
@@ -13,11 +15,14 @@ import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static javafx.application.Application.launch;
+
 
 public class Main {
     public static final Logger logger = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
+                    HelloWorld.start(args);
                 System.setProperty("log4jLauncherRoot", LauncherVariables.gameDirectory+"/launcher_logs.txt");
                 logger.info("Starting LabbyRinth");
                 SplashGui.create();
