@@ -15,6 +15,10 @@
   "devDependencies": {
     "@mdi/js": "^7.4.47",
     "@smui/button": "^7.0.0-beta.18",
+    "@smui/layout-grid": "^7.0.0-beta.18",
+    "@smui/list": "^7.0.0-beta.18",
+    "@smui/menu-surface": "^7.0.0-beta.18",
+    "@smui/paper": "^7.0.0-beta.18",
     "@sveltejs/vite-plugin-svelte": "^3.0.2",
     "@tsconfig/svelte": "^5.0.2",
     "smui-theme": "^7.0.0-beta.18",
@@ -24,5 +28,8 @@
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
     "vite-plugin-zip-pack": "^1.2.3"
+  },
+  "dependencies": {
+    "svelte-material-ui": "^7.0.0-beta.18"
   }
 }

@@ -6,10 +6,13 @@ import com.diamssword.labbyrinth.logger.Log;
 import com.diamssword.labbyrinth.view.components.PackPicker;
 import com.sun.javafx.webkit.WebConsoleListener;
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import netscape.javascript.JSObject;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -47,9 +50,17 @@ public class HelloWorld extends Application {
             WebConsoleListener.setDefaultListener((webView1, message, lineNumber, sourceId) -> {
                 System.out.println(message + "[at " + lineNumber + "]");
             });
-            webView.getEngine().load("http://localhost:51973/");
 
-            //webView.getEngine().load(new File(f,"index.html").toURI().toString());
+            webView.getEngine().load("http://localhost:51973/");
+            webView.getEngine().getLoadWorker().stateProperty().addListener(
+                    (ObservableValue<? extends Worker.State> ov, Worker.State oldState,
+                     Worker.State newState) -> {
+                        if (newState == Worker.State.SUCCEEDED) {
+                            JSObject win
+                                    = (JSObject) webView.getEngine().executeScript("window");
+                            win.setMember("bridge", new JavaBridge());
+                        }
+                    });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
