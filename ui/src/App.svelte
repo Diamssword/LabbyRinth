@@ -1,58 +1,46 @@
 <script lang="ts">
-  import LayoutGrid, { Cell } from '@smui/layout-grid';
-  import bridge,{init} from './lib/bridge';
+  import {Bridge, init} from './lib/Bridge';  
+  import { Button, GradientButton, Progressbar } from 'flowbite-svelte';
+
   import MenuBar from './lib/MenuBar.svelte';
-  import Button, { Label } from '@smui/button';
     import { onMount } from 'svelte';
+    import ProfileSelector from './lib/ProfileSelector.svelte';
+    import PackSelector from './lib/PackSelector.svelte';
+    
+    var isGameReady=false;
+    var progress=0;
+    var status="";
     var ready=false;
+    var users={}
   onMount(()=>{
-setTimeout(() => {
-  init();
-  ready=true;
-  bridge.getProfiles().then(d=>{console.log(JSON.stringify(d));
-    bridge.getSkin("cd270c6a52754147a46c6c1eb21efc7c").then(console.log)
-  })
-  
-}, 500);
+    setTimeout(() => {
+      init(); 
+      ready=true;
+      Bridge.on("packsReady",(r)=>isGameReady=r!="true")
+      Bridge.isPackLocked().then(l=>isGameReady=!l)
+      Bridge.on("progress",(r)=>progress=parseInt(r))
+      Bridge.on("status",(r)=>status=r)
+    }, 500);
   })
 </script>
 
-<main>
+<main class="flex h-screen">
   
   {#if ready}
-      <div class="side_menu menu-cell"><MenuBar/></div>
-      <div class="side_menu button-cell">
-        <div >
-        <Button class="" variant="raised">
-          <Label>Raised</Label>
-        </Button>
-      </div>
-      </div>
-      <div class="side_menu right-cell" >Span 4</div>
+      <div class="w-3/12 "><MenuBar/></div>
+      <div class="w-5/12 flex flex-wrap items-end justify-center mb-44">
+        <div class="flex items-center flex-col w-full justify-center gap-8">
+        <div class="w-4/5">
+          <div class="mb-1 font-medium dark:text-white">{status}</div>
+            <Progressbar progress={progress} size="h-4" labelInside  />
+          </div>
+          <GradientButton disabled={!isGameReady} color="green" size="xl" shadow pill class="w-4/5 top-3/4" on:click={Bridge.startGame}>Jouer</GradientButton >
+          </div>
+      </div >
+      <div class="w-4/12 flex flex-wrap justify-end mt-10 mr-5" ><ProfileSelector/><PackSelector/></div>
       {/if}
 </main>
 
 <style>
-main{
-  display: flex;
-}
-.menu-cell{
-  width: 30%;
-  height: 100vh;
-}
-.button-cell{
-  width: 40%;
-  height: 100vh;
-}
-.right-cell{
-  width: 30%;
-  height: 100vh;
-}
- .side_menu {
-    align-content: so;
-    display: flex;
-    align-items: center;
-    background-color: var(--mdc-theme-secondary, #333);
-    color: var(--mdc-theme-on-secondary, #fff);
-  }
+
 </style>

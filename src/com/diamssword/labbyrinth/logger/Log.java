@@ -3,12 +3,13 @@ package com.diamssword.labbyrinth.logger;
 import com.diamssword.labbyrinth.Main;
 import com.diamssword.labbyrinth.view.MainGui;
 import com.diamssword.labbyrinth.view.SplashGui;
+import com.diamssword.labbyrinth.view.browser.JavaBridge;
 
 public class Log {
     public static void setProgress(int percent)
     {
-        if(MainGui.instance!=null)
-            MainGui.instance.setProgress(Math.min(percent,100));
+        if(JavaBridge.instance!=null)
+            JavaBridge.instance.sendEvent("progress",Math.min(percent,100));
         else if(SplashGui.instance !=null)
             SplashGui.instance.setProgress(Math.min(percent,100));
         else
@@ -16,10 +17,10 @@ public class Log {
     }
     public static void setProgress(String title,int percent)
     {
-        if(MainGui.instance!=null)
+        if(JavaBridge.instance!=null)
         {
-            MainGui.instance.setProgress(Math.min(percent,100));
-            MainGui.instance.setProgressTitle(title);
+            JavaBridge.instance.sendEvent("progress",Math.min(percent,100));
+            JavaBridge.instance.sendEvent("status",title);
         }
         else if(SplashGui.instance !=null)
         {

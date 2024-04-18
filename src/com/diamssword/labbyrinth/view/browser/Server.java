@@ -70,18 +70,24 @@ class Server
     }
   }
 
+  private static  com.sun.net.httpserver.HttpServer server;
+  public static void stop()
+  {
+    new Thread(()->{
+      if(server!=null)
+        server.stop(1);
+    }).start();
+
+  }
   public static void start(String[] a) throws java.io.IOException
   {
     args(a);
     java.net.InetSocketAddress host =
         new java.net.InetSocketAddress("localhost", port);
-    com.sun.net.httpserver.HttpServer server =
-        com.sun.net.httpserver.HttpServer.create(host, 0
-        );
+    server =    com.sun.net.httpserver.HttpServer.create(host, 0);
     server.createContext("/", Server::handleRequest);
     server.start();
-    System.out.println("Server is running at http://"
-        + host.getHostName() + ":" + host.getPort() + prefix);
+    System.out.println("Server is running at http://" + host.getHostName() + ":" + host.getPort() + prefix);
   }
 
   private static void handleRequest(com.sun.net.httpserver.HttpExchange t)

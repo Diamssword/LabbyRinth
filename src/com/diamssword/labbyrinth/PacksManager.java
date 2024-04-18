@@ -51,6 +51,7 @@ public class PacksManager {
             }
 
         }
+
         packsDisplay=new Vector<KeyPair>(packs.stream().map(v->new KeyPair(v.name, TextUtils.capitalizeWords(v.name().replaceAll("-"," ").replaceAll("_"," ")))).toList());
         readyListeners.forEach(c->{
             c.accept(packs);

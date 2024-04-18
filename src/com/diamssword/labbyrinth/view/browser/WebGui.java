@@ -1,33 +1,32 @@
 package com.diamssword.labbyrinth.view.browser;
 
 import com.diamssword.labbyrinth.LauncherVariables;
-import com.diamssword.labbyrinth.Profiles;
+import com.diamssword.labbyrinth.PacksManager;
 import com.diamssword.labbyrinth.downloaders.FileDownloader;
 import com.diamssword.labbyrinth.logger.Log;
+import com.diamssword.labbyrinth.view.MainGui;
+import com.diamssword.labbyrinth.view.SplashGui;
 import com.diamssword.labbyrinth.view.components.PackPicker;
 import com.sun.javafx.webkit.WebConsoleListener;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
-import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
 import org.apache.commons.io.FileUtils;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import java.io.*;
-import java.net.URLEncoder;
-import java.util.Base64;
 import java.util.Enumeration;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class HelloWorld extends Application {
+public class WebGui extends Application {
 
     private static JavaBridge bridge;
 
@@ -68,6 +67,7 @@ public class HelloWorld extends Application {
 
             // webView.getEngine().load("http://localhost:5173/");
             webView.getEngine().load("http://localhost:51973/");
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -76,7 +76,12 @@ public class HelloWorld extends Application {
         Scene scene = new Scene(vBox, 960, 600);
 
         primaryStage.setScene(scene);
+        SplashGui.instance.close();
+        primaryStage.getIcons().add(new Image(Objects.requireNonNull(WebGui.class.getResourceAsStream("/images/logo.png"))));
         primaryStage.show();
+        primaryStage.setOnCloseRequest(event -> {
+           Server.stop();
+        });
 
     }
     private void unzip(File zipFile, File ouptut)

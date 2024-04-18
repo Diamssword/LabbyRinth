@@ -84,9 +84,9 @@ public class GameInstance {
 
             System.out.println("Running :" + Arrays.toString(cmd.toArray()));
             ProcessBuilder builder = new ProcessBuilder(cmd);//.redirectErrorStream(true);
-        //    builder.inheritIO();
+            builder.inheritIO();
             Process process=builder.start();
-            ConsoleGui.pipeOutput(process.getInputStream(),process.getErrorStream());
+       //     ConsoleGui.pipeOutput(process.getInputStream(),process.getErrorStream());
             process.getOutputStream().close();
             process.waitFor();
 
