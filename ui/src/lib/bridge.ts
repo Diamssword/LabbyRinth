@@ -21,7 +21,10 @@ var requestIds = 0;
 export function init() {
     if (window) {
         if (!(window as any).bridge)
+        {
             console.error("No Bridge Found");
+            window.bridge=fakeBridge
+        }
         (window as any).AndroidAsyncResult = receiveAsyncResult;
 
     }
@@ -54,7 +57,8 @@ export default {
     }
 };
 
-
+//used for testing when outside of JavaFX context
 var fakeBridge = {
-
+    getProfiles:(callback:number)=>{receiveAsyncResult(callback,'{"list":[{"name":"Diamssword","uuid":"fakuuid"},{"name":"EaXsil","uuid":"fakuuid1"}]}')},
+    getSkin:(uuid:string,callback:number)=>{receiveAsyncResult(callback,'none')}
 }
