@@ -1,6 +1,7 @@
 package com.diamssword.labbyrinth.view.browser;
 
 import com.diamssword.labbyrinth.LauncherVariables;
+import com.diamssword.labbyrinth.Profiles;
 import com.diamssword.labbyrinth.downloaders.FileDownloader;
 import com.diamssword.labbyrinth.logger.Log;
 import com.diamssword.labbyrinth.view.components.PackPicker;
@@ -10,22 +11,25 @@ import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
+import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
 import org.apache.commons.io.FileUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import javax.imageio.ImageIO;
+import java.io.*;
+import java.net.URLEncoder;
+import java.util.Base64;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class HelloWorld extends Application {
+
+    private static JavaBridge bridge;
 
     public static void start(String... args)
     {
@@ -51,16 +55,19 @@ public class HelloWorld extends Application {
                 System.out.println(message + "[at " + lineNumber + "]");
             });
 
-            webView.getEngine().load("http://localhost:51973/");
             webView.getEngine().getLoadWorker().stateProperty().addListener(
                     (ObservableValue<? extends Worker.State> ov, Worker.State oldState,
                      Worker.State newState) -> {
                         if (newState == Worker.State.SUCCEEDED) {
-                            JSObject win
-                                    = (JSObject) webView.getEngine().executeScript("window");
-                            win.setMember("bridge", new JavaBridge());
+                            JSObject win  = (JSObject) webView.getEngine().executeScript("window");
+                            bridge= new JavaBridge(webView.getEngine());
+                            win.setMember("bridge",bridge);
+
                         }
                     });
+
+            // webView.getEngine().load("http://localhost:5173/");
+            webView.getEngine().load("http://localhost:51973/");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -102,4 +109,5 @@ public class HelloWorld extends Application {
             System.err.println("Le .mrpack est corrompu");
         }
     }
+
 }
