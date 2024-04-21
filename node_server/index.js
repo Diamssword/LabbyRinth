@@ -7,9 +7,9 @@ import * as fs  from 'fs';
   
                         //a voir si on m'est pas en place le version sorting directement coté launcher (infra serveur beaucoup plus légère)
                         //https://stackoverflow.com/questions/41198379/sorting-version-numbers
-
-app.listen({ port: 3000 }).then(() => {
-    console.log('Server running at http://localhost:3000/');
+const port=process.env.port||3000;
+app.listen({ port }).then(() => {
+    console.log('Server running at http://localhost:'+port);
 });
 var packs = {};
 var lastRefresh = 0;

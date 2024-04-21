@@ -1,3 +1,4 @@
 gameDirectory=.labbyrinth
 updateUrl=http://localhost:3000
 defaultPack=green_resurgence
+devMode=true
