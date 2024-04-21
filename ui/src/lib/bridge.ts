@@ -1,5 +1,5 @@
 declare global {
-    var bridge: { getProfiles: any,getSkin:any,getPacks:any,getPackLogo:any,selectProfile:any,selectPack:any,isPackLocked:any,startGame:any }
+    var bridge: { getProfiles: any,getSkin:any,getPacks:any,getPackLogo:any,selectProfile:any,selectPack:any,isPackLocked:any,startGame:any,getSettings:any,setSettings:any,openFolderOrUrl:any,addAccount:any }
 }
 
 /**
@@ -96,6 +96,22 @@ export const Bridge= {
         window.bridge.isPackLocked(prom.id);
         return (await prom.callback)=="true";
     },
+    async getSettings()
+    {
+        let prom=AndroidPromiser<string>();
+        window.bridge.getSettings(prom.id);
+        return JSON.parse(await prom.callback) as {ram:number,maxRam:number,javaArgs:string};
+    },
+    async addAccount(email:string)
+    {
+        let prom=AndroidPromiser<string>();
+        window.bridge.addAccount(email,prom.id);
+        return (await prom.callback)=="true";
+    },
+    setSettings(settings:any)
+    {
+        window.bridge.setSettings(JSON.stringify(settings));
+    },
     selectProfile(uuid:string)
     {
         window.bridge.selectProfile(uuid);
@@ -107,11 +123,19 @@ export const Bridge= {
     startGame()
     {
         window.bridge.startGame();
+    },
+    openFolderOrUrl(url:string)
+    {
+            window.bridge.openFolderOrUrl(url)
     }
 };
 //used for testing when outside of JavaFX context
 var fakeBridge = {
     getProfiles:(callback:number)=>{receiveAsyncResult(callback,'{"list":[{"name":"Diamssword","uuid":"fakuuid"},{"name":"EaXsil","uuid":"fakuuid1"}]}')},
     getPacks:(callback:number)=>{receiveAsyncResult(callback,'{"list":[{"name":"Green Resurgence","uuid":"green"},{"name":"FTB","uuid":"ftb"}]}')},
-    getSkin:(uuid:string,callback:number)=>{receiveAsyncResult(callback,'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACQUlEQVR4Xu3QvWrTcRQG4NBBr8JdJ0EcungBTi5eh6tXIA4OCoLgZ%2F0qim2IUqsZdPZqMmhqbYlpDA6CT%26plus%3BDAwbi9wwPhz8k5v%2FcdXLt8cfE%2FXTp3puS8nO9ynwZ%26plus%3BWDcfJOflfJf7lAL8sG4%26plus%3BSM7L%26plus%3BS73KQX4Yd18kJyX813uUwrww7r5IDkv57vcp8H1K5uLytXNsyXn5cEuA8n5rhTgg2VgOS8PdhlYznelAB8sA8t5ebDLwHK%26plus%3BKwX4YBlYzsuDXQaW810pwEBd31%2FcKx293iod774q%2FXz3tnSyPy5NH98qpQADdRlYBpaBZWAZWAZWCjBQl4FlYBlYBpaBZWClAAN1GVgGloFlYBlYBlYKmD5Z%2FihMJpN%2FcvDsbunbo5sl93X9WJZcSQEGlgu7DCwDy31dBlYKMLBc2GVgGVju6zKwUoCB5cIuA8vAcl%26plus%3BXgZUC%2FCAX6vxwozQb7ZS8p8GpYcn3aL63V0oBHpQLZWAZWN6TgeV7ZGClAA%2FKhTKwDCzvycDyPTKwUoAH5UIZWAaW92Rg%26plus%3BR4ZWCnAD3KhLow3Sovx59J8%2F2NpcPpLyffIe0oBBpYLZWB5UAaWgeV75D2lAAPLhTKwPCgDy8DyPfKeUoCB5UIZWB6UgWVg%26plus%3BR55TynADzp4eqd0uP2gdLzzsjQbDUsnyxIqvnfVp1IKWP1DCviLgWVgGVgGloHle1ethk4BKSAF%2FJECvj68sahMt26XDrfvl47ePC%2FNRrul%26plus%3BfsPpdXAWg2dAlJACkgBKSAFpIDffgGUjXakejAkOAAAAABJRU5ErkJggg%3D%3D')}
+    getSkin:(uuid:string,callback:number)=>{receiveAsyncResult(callback,'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAACQUlEQVR4Xu3QvWrTcRQG4NBBr8JdJ0EcungBTi5eh6tXIA4OCoLgZ%2F0qim2IUqsZdPZqMmhqbYlpDA6CT%26plus%3BDAwbi9wwPhz8k5v%2FcdXLt8cfE%2FXTp3puS8nO9ynwZ%26plus%3BWDcfJOflfJf7lAL8sG4%26plus%3BSM7L%26plus%3BS73KQX4Yd18kJyX813uUwrww7r5IDkv57vcp8H1K5uLytXNsyXn5cEuA8n5rhTgg2VgOS8PdhlYznelAB8sA8t5ebDLwHK%26plus%3BKwX4YBlYzsuDXQaW810pwEBd31%2FcKx293iod774q%2FXz3tnSyPy5NH98qpQADdRlYBpaBZWAZWAZWCjBQl4FlYBlYBpaBZWClAAN1GVgGloFlYBlYBlYKmD5Z%2FihMJpN%2FcvDsbunbo5sl93X9WJZcSQEGlgu7DCwDy31dBlYKMLBc2GVgGVju6zKwUoCB5cIuA8vAcl%26plus%3BXgZUC%2FCAX6vxwozQb7ZS8p8GpYcn3aL63V0oBHpQLZWAZWN6TgeV7ZGClAA%2FKhTKwDCzvycDyPTKwUoAH5UIZWAaW92Rg%26plus%3BR4ZWCnAD3KhLow3Sovx59J8%2F2NpcPpLyffIe0oBBpYLZWB5UAaWgeV75D2lAAPLhTKwPCgDy8DyPfKeUoCB5UIZWB6UgWVg%26plus%3BR55TynADzp4eqd0uP2gdLzzsjQbDUsnyxIqvnfVp1IKWP1DCviLgWVgGVgGloHle1ethk4BKSAF%2FJECvj68sahMt26XDrfvl47ePC%2FNRrul%26plus%3BfsPpdXAWg2dAlJACkgBKSAFpIDffgGUjXakejAkOAAAAABJRU5ErkJggg%3D%3D')},
+    getSettings:(callback:number)=>{receiveAsyncResult(callback,'{"ram":5,"maxRam":18,"javaArgs":"-fakeArg"}')},
+    isPackLocked:(callback:number)=>{receiveAsyncResult(callback,"true")},
+    addAccount:(text:string,callback:number)=>{setTimeout(()=>receiveAsyncResult(callback,"false"),3000);}
+    
 }

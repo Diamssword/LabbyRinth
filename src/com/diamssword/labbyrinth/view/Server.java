@@ -1,4 +1,4 @@
-package com.diamssword.labbyrinth.view.browser;/*
+package com.diamssword.labbyrinth.view;/*
  * Copyright 2020 Jens "Nigjo" Hofschröer.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,14 +15,17 @@ package com.diamssword.labbyrinth.view.browser;/*
  */
 
 import com.diamssword.labbyrinth.LauncherVariables;
+import com.sun.net.httpserver.HttpServer;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.BindException;
 
 /**
  * Runs a simple Debug Server in a local folder.
  * This file can be directly started with Java 11+.
  */
-class Server
+public class Server
 {
   static final java.util.Map<String, String> types =
       new java.util.HashMap<>(java.util.Map.of(
@@ -82,14 +85,23 @@ class Server
   public static void start(String[] a) throws java.io.IOException
   {
     args(a);
-    java.net.InetSocketAddress host =
-        new java.net.InetSocketAddress("localhost", port);
-    server =    com.sun.net.httpserver.HttpServer.create(host, 0);
+
+    server= iteratePorts(port,0);
     server.createContext("/", Server::handleRequest);
     server.start();
-    System.out.println("Server is running at http://" + host.getHostName() + ":" + host.getPort() + prefix);
+    System.out.println("Server is running at http://" + server.getAddress().getHostName() + ":" +  server.getAddress().getPort() + prefix);
   }
-
+  private static HttpServer iteratePorts(int portIn,int tries) throws IOException {
+    if(tries>1000)
+      throw new RuntimeException("Could not find port to create server!");
+    try {
+      java.net.InetSocketAddress host =new java.net.InetSocketAddress("localhost", portIn);
+      return com.sun.net.httpserver.HttpServer.create(host, 0);
+    }catch (BindException e)
+    {
+      return iteratePorts(portIn+1,tries+1);
+    }
+  }
   private static void handleRequest(com.sun.net.httpserver.HttpExchange t)
       throws java.io.IOException
   {
@@ -104,8 +116,6 @@ class Server
     {
       local = new java.io.File(new File(LauncherVariables.gameDirectory,"view"), path.substring(prefix.length()));
     }
-    System.out.print(new java.util.Date().toString());
-    System.out.print(" GET " + uri);
     if(local != null && local.exists())
     {
       //String response = "This is the response of "+local.getAbsolutePath();
@@ -113,11 +123,9 @@ class Server
       String ext = filename.substring(filename.lastIndexOf('.') + 1);
       if(types.containsKey(ext))
       {
-        System.out.print(" " + types.get(ext));
         t.getResponseHeaders()
             .add("Content-Type", types.get(ext));
       }
-      System.out.print(" 200 " + local.length());
       t.sendResponseHeaders(200, local.length());
       try(java.io.OutputStream out = t.getResponseBody())
       {
@@ -126,7 +134,7 @@ class Server
     }
     else
     {
-      System.out.print(" 404");
+      System.out.println(" 404");
       String response = "File not found " + uri.toString();
       t.sendResponseHeaders(404, response.length());
       try(java.io.OutputStream os = t.getResponseBody())
@@ -134,6 +142,5 @@ class Server
         os.write(response.getBytes());
       }
     }
-    System.out.println();
   }
 }

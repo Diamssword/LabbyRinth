@@ -39,8 +39,6 @@ public class Profiles {
     }
     public static void registerUpdateListener(Consumer<List<PlayerProfile>> listener)
     {
-
-        System.out.println("addingList");
         listeners.add(listener);
     }
 
@@ -74,7 +72,6 @@ public class Profiles {
             return CompletableFuture.supplyAsync(()->new ArrayList<>(profiles));
         else
         {
-            needRefresh=false;
             try {
                 profiles.clear();
                 return CliInterface.getProfiles().thenApply(c->{
@@ -83,10 +80,12 @@ public class Profiles {
                         JSONObject ob=c.getJSONObject(i);
                         profiles.add(new PlayerProfile(ob.getString("username"),ob.getString("uuid"),ob.getString("email")));
                     }
+                    needRefresh=false;
                     listeners.forEach(l->l.accept(new ArrayList<>(profiles)));
                     return new ArrayList<>(profiles);
                 });
             } catch (IOException | InterruptedException e) {
+                needRefresh=false;
                 throw new RuntimeException(e);
             }
         }

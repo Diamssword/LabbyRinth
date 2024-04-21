@@ -1,6 +1,7 @@
 package com.diamssword.labbyrinth.downloaders;
 
 import com.diamssword.labbyrinth.LauncherVariables;
+import com.diamssword.labbyrinth.PacksManager;
 import com.diamssword.labbyrinth.logger.Log;
 import com.diamssword.labbyrinth.utils.MD5Checker;
 import org.apache.commons.io.FileUtils;
@@ -41,6 +42,7 @@ public class MrpackReader {
             Log.setProgress("Sauvegarde des caches",0);
             saveCache(packFolder,versionId);
             Log.setProgress(100);
+            PacksManager.copyAuthFileToPacks();
         } catch (IOException e) {
             System.err.println("Failed to save cache");
         }

@@ -33,16 +33,15 @@ public class VersionChecker {
     public static boolean downloadUpdate(String dlPath, File path) throws IOException {
 
         Log.setProgress("Téléchargement de "+dlPath);
-       return FileDownloader.downloadFile(LauncherVariables.update_url+"/packs/"+dlPath,path,Log::setProgress);
+       return FileDownloader.downloadFile(LauncherVariables.updateUrl +"/packs/"+dlPath,path,Log::setProgress);
     }
     public static CompletableFuture<JSONObject> loadVersionFile() throws IOException
     {
         return CompletableFuture.supplyAsync(()->{
             try {
-                return Utils.getJson(new URL(LauncherVariables.update_url));
+                return Utils.getJson(new URL(LauncherVariables.updateUrl));
             } catch (IOException e) {
                 Main.logger.warning(e.toString());
-
               return null;
             }
         });

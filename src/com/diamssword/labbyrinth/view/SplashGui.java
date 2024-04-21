@@ -1,10 +1,5 @@
 package com.diamssword.labbyrinth.view;
 
-import com.diamssword.labbyrinth.GameInstance;
-import com.diamssword.labbyrinth.Profiles;
-import com.diamssword.labbyrinth.view.components.ProfilePicker;
-import net.miginfocom.swing.MigLayout;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +24,7 @@ public class SplashGui {
         frame = new JFrame(" Initialisation LabbyRinth");
         SplashGui gui=new SplashGui();
         try {
-            frame.setIconImage(ImageIO.read(MainGui.class.getResource("/images/logo.png")));
+            frame.setIconImage(ImageIO.read(SplashGui.class.getResource("/images/logo.png")));
         } catch (IOException e) {}
         frame.setPreferredSize(new Dimension(300,100));
         frame.setResizable(false);
@@ -48,9 +43,7 @@ public class SplashGui {
     public SplashGui()
     {
 
-        MigLayout layout = new MigLayout("fill");
         panel1= new JPanel();
-        panel1.setLayout(layout);
         panel1.add(progressTitle=new JLabel("..."),"wrap");
         panel1.add(progressBar=new JProgressBar(0,100),"grow");
         progressBar.setValue(100);

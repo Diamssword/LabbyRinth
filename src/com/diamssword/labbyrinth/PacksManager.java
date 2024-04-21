@@ -3,9 +3,9 @@ package com.diamssword.labbyrinth;
 import com.diamssword.labbyrinth.downloaders.MrpackReader;
 import com.diamssword.labbyrinth.downloaders.Utils;
 import com.diamssword.labbyrinth.downloaders.VersionChecker;
-import com.diamssword.labbyrinth.logger.Log;
 import com.diamssword.labbyrinth.utils.KeyPair;
 import com.diamssword.labbyrinth.utils.TextUtils;
+import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -43,7 +43,7 @@ public class PacksManager {
                     updatePreferredPack();
             });
         } else {
-            PackInstance inst=loadPackInstance(LauncherVariables.default_pack);
+            PackInstance inst=loadPackInstance(LauncherVariables.defaultPack);
             if(inst!=null) {
                 packs.add(inst);
                 setPreferedPack(inst.name);
@@ -94,7 +94,13 @@ public class PacksManager {
                 subVersion=infos.getString("fabric-loader");
             }
             GameInstance inst=new GameInstance(getPreferedPack(),type,infos.getString("minecraft"),subVersion);
-            new Thread(()-> inst.start(Profiles.getSelectedProfile().get().email)).start();
+            new Thread(()-> inst.start(Profiles.getSelectedProfile().get().email,(p)->{
+
+                isLocked=false;
+                updatedListeners.forEach(c->c.accept(isLocked));
+            })).start();
+            isLocked=true;
+            updatedListeners.forEach(c->c.accept(isLocked));
 
         }
 
@@ -169,6 +175,21 @@ public class PacksManager {
         File temp = File.createTempFile(pack.name, ".mrpack");
         VersionChecker.downloadUpdate(pack.latest.getValue(), temp);
         return new MrpackReader(temp);
+    }
+    public static void copyAuthFileToPacks()
+    {
+        File auths=new File(LauncherVariables.gameDirectory,"portablemc_auth.json");
+        if(auths.exists()){
+
+            packs.forEach(c->{
+                File f=LauncherVariables.getPackFolder(c.name);
+                try {
+                    FileUtils.copyFile(auths,new File(f,"portablemc_auth.json"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 
     public static record PackInstance(String name,String version,KeyPair latest,boolean shouldUpdate){};

@@ -1,9 +1,7 @@
 package com.diamssword.labbyrinth.logger;
 
-import com.diamssword.labbyrinth.Main;
-import com.diamssword.labbyrinth.view.MainGui;
 import com.diamssword.labbyrinth.view.SplashGui;
-import com.diamssword.labbyrinth.view.browser.JavaBridge;
+import com.diamssword.labbyrinth.view.JavaBridge;
 
 public class Log {
     public static void setProgress(int percent)

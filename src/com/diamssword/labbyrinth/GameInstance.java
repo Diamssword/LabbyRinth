@@ -1,16 +1,14 @@
 package com.diamssword.labbyrinth;
 
 import com.diamssword.labbyrinth.downloaders.Utils;
-import com.diamssword.labbyrinth.view.ConsoleGui;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 public class GameInstance {
 
@@ -61,7 +59,7 @@ public class GameInstance {
         return s;
     }
 
-    public void start(String user)
+    public void start(String user, Consumer<Process> onExit)
     {
         try {
             List<String> cmd=new ArrayList<>();
@@ -77,7 +75,10 @@ public class GameInstance {
             if(ob.has("ram"))
                 Math.max(1,Utils.readCommonCache().getInt("ram"));
             cmd.add("start");
-            cmd.add("--jvm-args=\"-Xmx"+ram+"G\"");
+            String jv="-Xmx"+ram+"G";
+            if(ob.has("javaArgs"))
+                    jv=jv+" "+ob.getString("javaArgs");
+            cmd.add("\"--jvm-args="+jv.trim()+"\"");
             cmd.add(getVersionCmd());
             cmd.add("-l");
             cmd.add("\""+user+"\"");
@@ -88,7 +89,9 @@ public class GameInstance {
             Process process=builder.start();
        //     ConsoleGui.pipeOutput(process.getInputStream(),process.getErrorStream());
             process.getOutputStream().close();
+            process.onExit().thenAccept(onExit);
             process.waitFor();
+
 
         } catch (Exception  e) {
             throw new RuntimeException(e);

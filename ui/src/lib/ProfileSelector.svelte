@@ -1,9 +1,13 @@
 <script lang="ts">
     import { Avatar, Card, Select,Label,GradientButton,Tooltip } from "flowbite-svelte";
-    import { onMount } from "svelte";
+    import { createEventDispatcher, onMount } from "svelte";
     import { Bridge } from "./Bridge";
+    import AddAccount from "./AddAccount.svelte";
     var avatar="/steve.png"
-    onMount(()=>{
+    
+    const disp=createEventDispatcher();
+    function loadProfiles()
+    {
         Bridge.getProfiles().then(ls=>{
             profiles=ls.list.map(v=>{return {value:v.uuid,name:v.name}})
             if(ls.selected)
@@ -11,6 +15,9 @@
                 selected=ls.selected;
             }
         })
+    }
+    onMount(()=>{
+     loadProfiles()
     })
     $:if(selected)
     {
@@ -23,19 +30,18 @@
     }
     let selected:string;
   var profiles:{value:string,name:string}[] = [];
-
+    var addAcount=false
 </script>
 <div class="space-y-4 w-4/4">
 
     <Card horizontal class="space-x-1 md:p-4 bg-gray-600 border-gray-800 w-full">
-        
         <Avatar rounded src={avatar} class="h-14 w-14 self-center bg-transparent"/>
-      <Select items={profiles} bind:value={selected} placeholder="Ajoutez un profile..." class="h-12 self-center" on:change={()=>{
+      <Select items={profiles} bind:value={selected} placeholder={profiles.length>0?"":"Ajoutez un profile..."} class="h-12 self-center" on:change={()=>{
           Bridge.selectProfile(selected);
       }}></Select>
-    
-    <GradientButton color=green shadow class="h-12 self-center">+</GradientButton>
+    <GradientButton color=green shadow class="h-12 self-center" on:click={()=>addAcount=true}>+</GradientButton>
     </Card>
     
   </div>
+  <AddAccount bind:formModal={addAcount} on:refresh={()=>{loadProfiles(); disp("refresh");}} />
 
