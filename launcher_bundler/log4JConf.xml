@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch4jConfig>
-  <dontWrapJar>false</dontWrapJar>
+  <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>D:\Git\LabyRinth\out\artifacts\LabyRinth_jar\LabyRinth.jar</jar>
+  <jar>launcher\launcher.jar</jar>
   <outfile>D:\Git\LabyRinth\out\LabbyRinth.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
@@ -15,10 +15,10 @@
   <manifest></manifest>
   <icon>D:\Git\LabyRinth\assets\images\logo.ico</icon>
   <jre>
-    <path>%JAVA_HOME%;%PATH%</path>
+    <path>launcher/jre</path>
     <requiresJdk>false</requiresJdk>
     <requires64Bit>false</requires64Bit>
-    <minVersion></minVersion>
+    <minVersion>17</minVersion>
     <maxVersion></maxVersion>
   </jre>
 </launch4jConfig>
