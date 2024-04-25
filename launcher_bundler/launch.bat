@@ -1,0 +1,1 @@
+start "LabbyRinth" "launcher/jre/bin/javaw.exe" -jar launcher/launcher.jar
