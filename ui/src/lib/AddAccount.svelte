@@ -1,6 +1,6 @@
 <script>
     import { Button, Modal, Label, Input, Checkbox, Spinner, Alert } from 'flowbite-svelte';
-    import { Bridge } from './Bridge';
+    import { Bridge } from './bridge';
     import { createEventDispatcher } from 'svelte';
     export let formModal = false;
     var isWaiting=false;

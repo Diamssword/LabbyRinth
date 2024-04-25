@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Avatar, Card, Select,Label,GradientButton,Tooltip } from "flowbite-svelte";
     import { createEventDispatcher, onMount } from "svelte";
-    import { Bridge } from "./Bridge";
+    import { Bridge } from "./bridge";
     import AddAccount from "./AddAccount.svelte";
     var avatar="/steve.png"
     
@@ -32,7 +32,7 @@
   var profiles:{value:string,name:string}[] = [];
     var addAcount=false
 </script>
-<div class="space-y-4 w-4/4">
+<div class="space-y-4 w-4/4 profil">
 
     <Card horizontal class="space-x-1 md:p-4 bg-gray-600 border-gray-800 w-full">
         <Avatar rounded src={avatar} class="h-14 w-14 self-center bg-transparent"/>
@@ -45,3 +45,8 @@
   </div>
   <AddAccount bind:formModal={addAcount} on:refresh={()=>{loadProfiles(); disp("refresh");}} />
 
+<style>
+    .profil{
+        margin-bottom: 16px;
+    }
+</style>
