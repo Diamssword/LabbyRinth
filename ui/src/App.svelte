@@ -7,14 +7,14 @@
     import PackSelector from './lib/PackSelector.svelte';
     const bgCount=4;
     var bgCurrent=parseInt((Math.random()*4).toFixed())
-    if(bgCurrent=bgCount)
+    if(bgCurrent==bgCount)
       bgCurrent=0;
-    setInterval(()=>{
+   /* setInterval(()=>{
       if(bgCurrent+1>=bgCount)
         bgCurrent=0;
       else
         bgCurrent++
-    },10000)
+    },10000)*/
     var isGameReady=false;
     var progress=100;
     var status="Prêt au lancement!";
@@ -43,13 +43,14 @@
   <div class="w-5/12 flex flex-wrap items-end justify-center mt-24">
       <div class="fixed bottom-0.5 left-0.5 w-full progress-bar-background">
         <div class="w-full flex justify-center s-XsEmFtvddWTw"> 
-          <div class="w-full flex flex-col items-center">
-            <div class="mb-1 font-medium dark:text-white text-left ml-4">{status}</div>
-            <div class="w-full flex justify-between progress-button-container">
-                <Progressbar progress={progress} size="h-4" labelInside class="w-70pct" />
-                <GradientButton disabled={!isGameReady} color="green" size="xl" shadow pill class="w-25pct ml-2" on:click={Bridge.startGame}>Jouer</GradientButton>
-            </div>
-        </div>        
+          <div class="w-full flex flex-col ">
+            <div class="mb-1 font-medium dark:text-white text-left ml-1">{status}</div>
+            <Progressbar progress={progress} size="h-4" labelInside class="w-full" />
+           
+        </div> 
+        <div class="flex justify-between progress-button-container w-2/5">
+          <GradientButton disabled={!isGameReady} color="green" size="xl" shadow pill class="w-25pct ml-2 w-full" on:click={Bridge.startGame}>Jouer</GradientButton>
+      </div>       
       </div>
       </div>
   </div>
