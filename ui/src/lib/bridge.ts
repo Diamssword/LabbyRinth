@@ -19,6 +19,7 @@ function AndroidPromiser<T>() {
 
 var callbacks: { [key: number]: (v: any) => void } = {};
 var requestIds = 0;
+(window as any).JavaEvent = receiveEvent;
 export function init() {
     if (window) {
         if (!(window as any).bridge)
@@ -27,7 +28,6 @@ export function init() {
             (window as any).bridge=fakeBridge
         }
         (window as any).JavaAsyncResult = receiveAsyncResult;
-        (window as any).JavaEvent = receiveEvent;
 
     }
 }

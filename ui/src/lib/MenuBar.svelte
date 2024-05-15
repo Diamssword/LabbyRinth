@@ -4,7 +4,7 @@
   import { sineIn } from 'svelte/easing';
     import { loadSettings, settings } from './Settings';
     import { onMount } from 'svelte';
-    import { Bridge } from './bridge';
+    import { Bridge } from './Bridge';
   let hidden2 = true;
   let spanClass = 'flex-1 ms-3 whitespace-nowrap';
   

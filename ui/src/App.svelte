@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {Bridge, init} from './lib/bridge';  
+  import {Bridge, init} from './lib/Bridge';  
   import { Button, GradientButton, Progressbar, Spinner } from 'flowbite-svelte';
   import MenuBar from './lib/MenuBar.svelte';
     import { onMount } from 'svelte';
@@ -19,16 +19,17 @@
     var progress=100;
     var status="Prêt au lancement!";
     var ready=false;
-  onMount(()=>{
-    setTimeout(() => {
-      init(); 
+    Bridge.on("bridgeReady",onReady)
+   // setTimeout(onReady,2000)
+    function onReady()
+    {
+      init();
       ready=true;
       Bridge.on("packsReady",(r)=>isGameReady=r!="true")
       checkLocked();
       Bridge.on("progress",(r)=>progress=parseInt(r))
       Bridge.on("status",(r)=>status=r)
-    }, 500);
-  })
+    }
   function checkLocked()
   {
     Bridge.isPackLocked().then(l=>isGameReady=!l)

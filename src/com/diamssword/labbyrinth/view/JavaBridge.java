@@ -49,6 +49,10 @@ public class JavaBridge {
             sendEvent("packsList",ob);
         });
     }
+    public void sendReadyEvent()
+    {
+        sendEvent("bridgeReady",true);
+    }
     public void startGame()
     {
         if(Profiles.getSelectedProfile().isPresent()) {

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Avatar, Card, Select,Label,GradientButton,Tooltip } from "flowbite-svelte";
     import { createEventDispatcher, onMount } from "svelte";
-    import { Bridge } from "./bridge";
+    import { Bridge } from "./Bridge";
     import AddAccount from "./AddAccount.svelte";
     var avatar="/steve.png"
     

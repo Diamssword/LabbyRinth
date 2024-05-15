@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { Bridge } from "./bridge";
+import { Bridge } from "./Bridge";
 
 
 export const settings=writable({

@@ -38,7 +38,7 @@ public class WebGui extends Application {
                             JSObject win  = (JSObject) webView.getEngine().executeScript("window");
                             bridge= new JavaBridge(webView.getEngine());
                             win.setMember("bridge",bridge);
-
+                            bridge.sendReadyEvent();
                         }
                     });
            webView.getEngine().load("http://localhost:51973/");

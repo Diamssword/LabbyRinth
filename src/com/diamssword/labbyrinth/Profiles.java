@@ -73,8 +73,8 @@ public class Profiles {
         else
         {
             try {
-                profiles.clear();
                 return CliInterface.getProfiles().thenApply(c->{
+                    profiles.clear();
                     for(int i=0;i<c.length();i++)
                     {
                         JSONObject ob=c.getJSONObject(i);

@@ -84,6 +84,7 @@ public class PacksManager {
     public static void launch()
     {
         JSONObject pack=Utils.readCache(getPreferedPack());
+        copyAuthFileToPacks();
         if(pack.has("dependencies"))
         {
             JSONObject infos=pack.getJSONObject("dependencies");
