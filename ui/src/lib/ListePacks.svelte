@@ -4,6 +4,7 @@
     import { createEventDispatcher, onMount } from 'svelte';
     export let formModal = false;
     var addModal=false;
+    var removeModal=false;
     var profiles:{name:string,value:string,skin:string}[]=[];
     async function loadProfiles()
     {
@@ -37,6 +38,7 @@
             });
     }
     var addPackCode:string;
+    var delPack:typeof profiles[0];
     var alert:string;
     function addPack()
     {
@@ -70,7 +72,7 @@
               <span class="px-2 py-0.5 flex-grow-0 ms-3 text-xs font-medium text-gray-500 bg-gray-200 rounded dark:bg-gray-700 dark:text-gray-400"> {profil.email}</span>
             </div>
                 </div>
-              <Button class="right-1" color=red on:click={()=>removeAccount(profil.value)}>X</Button>
+              <Button class="right-1" color=red on:click={()=>{delPack=profil;removeModal=true }}>X</Button>
               
             </div>
           </li>
@@ -96,4 +98,13 @@
     </Alert>
     {/if}
   </div>
+  </Modal>
+  <Modal title="Supprimer {delPack?.name}" bind:open={removeModal} autoclose>
+    
+    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">Supprimer ce pack supprimera tout les dossiers du pack (maps et screenshots compris )</p>
+    <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">Êtes vous sur de votre choix?</p>
+    <svelte:fragment slot="footer">
+      <Button on:click={() => Bridge.removePack(delPack.value)}>Supprime tout!</Button>
+      <Button color="alternative">Attend un peu</Button>
+    </svelte:fragment>
   </Modal>

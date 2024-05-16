@@ -55,4 +55,12 @@ public class Utils {
         }
         return new JSONObject();
     }
+    public static String getUIVersion()
+    {
+        var cache=readCommonCache();
+        if(cache.has("ui_version"))
+            return cache.getString("ui_version");
+        else
+            return LauncherVariables.version;
+    }
 }

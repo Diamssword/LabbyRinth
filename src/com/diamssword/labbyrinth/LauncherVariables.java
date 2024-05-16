@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 public class LauncherVariables {
     public static String gameDirectory=System.getenv("appdata")+"\\.labbyrinth";
+    public static String version="0.0.1";
     public static boolean devMode=true;
     public static String updateUrl ="http://localhost:3000";
     public static String defaultPack ="green_resurgence";
@@ -27,6 +28,8 @@ public class LauncherVariables {
                         updateUrl = var[1];
                     if (var[0].equals("defaultPack"))
                         defaultPack = var[1];
+                    if (var[0].equals("version"))
+                        version=var[1];
                 }
             }
         }catch (NullPointerException e)

@@ -1,4 +1,5 @@
+version=0.0.1
 gameDirectory=.labbyrinth
-updateUrl=http://localhost:3000
+updateUrl=https://modpack.diamssword.com
 defaultPack=green_resurgence
-devMode=true
+devMode=false

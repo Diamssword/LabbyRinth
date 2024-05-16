@@ -74,6 +74,10 @@ public class JavaBridge {
     {
         sendValue(callback,PacksManager.addPackFromCode(code));
     }
+    public void removePack(String id,int callback)
+    {
+        PacksManager.deletePack(id).thenAccept(v-> sendValue(callback,v));
+    }
     public void getPacks(int callback)
     {
         JSONObject ob=new JSONObject();

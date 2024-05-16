@@ -2,13 +2,16 @@ package com.diamssword.labbyrinth.downloaders;
 
 import com.diamssword.labbyrinth.LauncherVariables;
 import com.diamssword.labbyrinth.logger.Log;
+import com.diamssword.labbyrinth.utils.KeyPair;
 import com.diamssword.labbyrinth.view.Server;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
+import java.util.concurrent.ExecutionException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -17,24 +20,56 @@ public class ViewLoader {
 static File path=new File(LauncherVariables.gameDirectory,"view");
     public static void load() throws IOException {
         path=new File(LauncherVariables.gameDirectory,"view");
-        if(LauncherVariables.devMode)
+        var cache=Utils.readCommonCache();
+        if(LauncherVariables.devMode )  {
+            Utils.setCommonCache(cache);
             FileUtils.deleteDirectory(path);
-        if(!new File(path,"index.html").exists())
+           Log.setProgress("dev mode: unziping view from local...",0);
+           unzipLocal();
+        }
+        else if(!new File(path,"index.html").exists())
         {
-            System.out.println("no view found, unziping from jar...");
-            unzipLocal();
+            Log.setProgress("No view found, downloading...",0);
+            onlineLoad(true);
+        }
+        else
+        {
+            onlineLoad(false);
         }
         Server.start(new String[0]);
     }
-    private static void unzipLocal() throws IOException {
-        unzip(ViewLoader.class.getResource("/view/dist.zip").openStream());
-    }
-    private static void unzip(InputStream in) throws IOException {
-        Log.setProgress("Unziping view...");
-        File f1 = new File(path, "temp.zip");
-        FileUtils.copyInputStreamToFile(in, f1);
+    public static boolean onlineLoad(boolean force)
+    {
         try {
-            ZipFile zip = new ZipFile(f1);
+           KeyPair v= VersionChecker.getLatestVersion("ui").get();
+           if(v !=null)
+           {
+               if(force || VersionChecker.shouldUpdate(v.getKey(),Utils.getUIVersion()))
+               {
+                   Log.setProgress("Téléchargement de l'UI en cours...",0);
+                   File f1 = new File(path, "temp.zip");
+                   VersionChecker.downloadUpdate(v.getValue(),f1);
+                   FileUtils.deleteDirectory(path);
+                   unzip(f1);
+                   var cache=Utils.readCommonCache();
+                   cache.put("ui_version",v.getKey());
+                   Utils.setCommonCache(cache);
+                   return true;
+               }
+           }
+        } catch (IOException | InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    private static void unzipLocal() throws IOException {
+        unzip(new File("dist.zip"));
+       // unzip(ViewLoader.class.getResource("/view/dist.zip").openStream());
+    }
+    private static void unzip(File f) throws IOException {
+        Log.setProgress("Unziping view...");
+        try {
+            ZipFile zip = new ZipFile(f);
             Enumeration<? extends ZipEntry> entries = zip.entries();
             while (entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
@@ -53,7 +88,7 @@ static File path=new File(LauncherVariables.gameDirectory,"view");
                 }
             }
             zip.close();
-            f1.delete();
+            f.delete();
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Le .zip est corrompu");

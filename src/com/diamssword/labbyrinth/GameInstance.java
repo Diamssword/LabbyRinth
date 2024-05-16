@@ -73,7 +73,7 @@ public class GameInstance {
             var ram=4;
             JSONObject ob=Utils.readCommonCache();
             if(ob.has("ram"))
-               ram= Math.max(1,Utils.readCommonCache().getInt("ram"));
+                Math.max(1,Utils.readCommonCache().getInt("ram"));
             cmd.add("start");
             String jv="-Xmx"+ram+"G";
             if(ob.has("javaArgs"))
@@ -82,13 +82,12 @@ public class GameInstance {
             cmd.add(getVersionCmd());
             cmd.add("-l");
             cmd.add("\""+user+"\"");
-
             System.out.println("Running :" + Arrays.toString(cmd.toArray()));
             ProcessBuilder builder = new ProcessBuilder(cmd);//.redirectErrorStream(true);
             builder.inheritIO();
             Process process=builder.start();
        //     ConsoleGui.pipeOutput(process.getInputStream(),process.getErrorStream());
-            process.getOutputStream().close();
+       //     process.getOutputStream().close();
             process.onExit().thenAccept(onExit);
             process.waitFor();
 

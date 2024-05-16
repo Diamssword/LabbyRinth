@@ -1,5 +1,6 @@
 package com.diamssword.labbyrinth.view;
 
+import com.diamssword.labbyrinth.downloaders.VersionChecker;
 import com.sun.javafx.webkit.WebConsoleListener;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
@@ -24,7 +25,6 @@ public class WebGui extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("LabbyRinth");
-
         WebView webView = new WebView();
             webView.getEngine().setJavaScriptEnabled(true);
             WebConsoleListener.setDefaultListener((webView1, message, lineNumber, sourceId) -> {

@@ -1,5 +1,6 @@
 package com.diamssword.labbyrinth;
 
+import com.diamssword.labbyrinth.downloaders.VersionChecker;
 import com.diamssword.labbyrinth.downloaders.ViewLoader;
 import com.diamssword.labbyrinth.logger.Log;
 import com.diamssword.labbyrinth.view.SplashGui;
@@ -38,6 +39,7 @@ public class Main {
 
                     ViewLoader.load();
                     new Thread(PacksManager::load).start();
+                    //new Thread(VersionChecker::updateLauncher).start();
                     WebGui.start(args);
 //                    MainGui.create();
                 }

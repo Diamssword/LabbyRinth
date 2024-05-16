@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Vector;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
@@ -167,6 +168,35 @@ public class PacksManager {
     public static Optional<PackInstance> getPack(String name)
     {
         return packs.stream().filter(v->v.name.equals(name)).findFirst();
+    }
+    public static CompletableFuture<Boolean> deletePack(String name)
+    {
+        return CompletableFuture.supplyAsync(()->{
+            var pack=getPack(name);
+           if(pack.isPresent())
+           {
+               new File(LauncherVariables.gameDirectory, "caches/"+name+".json").delete();
+               var ca=Utils.readCommonCache();
+               packs.remove(pack.get());
+               var arr=new JSONArray();
+               packs.forEach(v->{
+                   arr.put(v.name);
+               });
+               Utils.setCommonCache(ca.put("packs",arr));
+               File f=LauncherVariables.getPackFolder(name);
+               try {
+                   FileUtils.deleteDirectory(f);
+                   packsDisplay=new Vector<KeyPair>(packs.stream().map(v->new KeyPair(v.name, TextUtils.capitalizeWords(v.name().replaceAll("-"," ").replaceAll("_"," ")))).toList());
+                   readyListeners.forEach(c->{
+                       c.accept(packs);
+                   });
+                   return true;
+               } catch (IOException e) {
+                   return false;
+               }
+           }
+           return false;
+        });
     }
     public static String getPreferedPack()
     {

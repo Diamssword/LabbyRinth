@@ -1,5 +1,5 @@
 declare global {
-    var bridge: { getProfiles: any,getSkin:any,getPacks:any,getPackLogo:any,selectProfile:any,selectPack:any,isPackLocked:any,startGame:any,getSettings:any,setSettings:any,openFolderOrUrl:any,addAccount:any,forceUpdate:any,removeAccount:any,addPack:any }
+    var bridge: { getProfiles: any,getSkin:any,getPacks:any,getPackLogo:any,selectProfile:any,selectPack:any,isPackLocked:any,startGame:any,getSettings:any,setSettings:any,openFolderOrUrl:any,addAccount:any,forceUpdate:any,removeAccount:any,addPack:any,removePack:any }
 }
 
 /**
@@ -94,6 +94,13 @@ export const Bridge= {
         let prom=AndroidPromiser<string>();
         window.bridge.addPack(code,prom.id);
         return parseInt(await prom.callback) as 0|1|-1;
+        
+    },
+    async removePack(id:string)
+    {
+        let prom=AndroidPromiser<string>();
+        window.bridge.removePack(id,prom.id);
+        return (await prom.callback)=="true";
         
     },
     async on(event:string,fn:(msg:string)=>void)

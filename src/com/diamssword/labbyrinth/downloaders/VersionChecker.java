@@ -5,10 +5,12 @@ import com.diamssword.labbyrinth.Main;
 import com.diamssword.labbyrinth.logger.Log;
 import com.diamssword.labbyrinth.utils.KeyPair;
 import com.diamssword.labbyrinth.utils.VersionNumberComparator;
+import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 
@@ -46,5 +48,53 @@ public class VersionChecker {
             }
         });
     }
+    private static File ogJar;
+    private static File newJar;
+   /* public static void updateCleanup()
+    {
+        if(ogJar !=null && newJar != null)
+        {
+            new Thread(()->{
+            try {
+                FileUtils.copyFile(newJar,ogJar);
+                newJar.delete();
+            } catch (IOException e) {
+                Main.logger.warning(e.toString());
+            }
+            }).start();
+        }
+    }
+    */
+    public static void updateLauncher()
+    {
+        try {
+            File f= new File(VersionChecker.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            File f1=new File(f.getParent(),"launcher_update.jar");
+            if(f.isFile())
+            {
+                VersionChecker.getLatestVersion("launcher").thenApply(v->{
 
+                    if(v!=null &&  VersionChecker.shouldUpdate(v.getKey(),LauncherVariables.version))
+                    {
+                        try {
+                            if(VersionChecker.downloadUpdate(v.getValue(),f1))
+                            {
+                                ogJar=f;
+                                newJar=f1;
+                                Utils.setCommonCache(Utils.readCommonCache().put("need_refresh",true));
+                                return true;
+                            }
+                            return false;
+                        } catch (IOException e) {
+                            Main.logger.warning(e.toString());
+                            return false;
+                        }
+                    }
+                    else return f.exists() && f.isFile();
+                });
+            }
+        } catch (URISyntaxException | IOException e) {
+            Main.logger.warning(e.toString());
+        }
+    }
 }
