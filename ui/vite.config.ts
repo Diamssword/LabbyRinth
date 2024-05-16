@@ -7,7 +7,8 @@ import fs from 'fs';
 export default defineConfig({
   build:{},
   plugins: [svelte(),zipPack({
-    outDir:"../assets/view",
+    //outDir:"../assets/view",
+    outDir:"../"
 
   })],
 });

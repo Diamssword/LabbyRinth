@@ -47,7 +47,7 @@ static File path=new File(LauncherVariables.gameDirectory,"view");
                if(force || VersionChecker.shouldUpdate(v.getKey(),Utils.getUIVersion()))
                {
                    Log.setProgress("Téléchargement de l'UI en cours...",0);
-                   File f1 = new File(path, "temp.zip");
+                   File f1 = new File(path.getParent(), "temp.zip");
                    VersionChecker.downloadUpdate(v.getValue(),f1);
                    FileUtils.deleteDirectory(path);
                    unzip(f1);
