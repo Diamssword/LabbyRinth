@@ -66,6 +66,14 @@ public class JavaBridge {
 
 
     }
+    public void forceUpdate()
+    {
+        PacksManager.updatePreferredPack(true);
+    }
+    public void addPack(String code,int callback)
+    {
+        sendValue(callback,PacksManager.addPackFromCode(code));
+    }
     public void getPacks(int callback)
     {
         JSONObject ob=new JSONObject();
@@ -74,6 +82,7 @@ public class JavaBridge {
             JSONObject ob1=new JSONObject();
             ob1.put("value",v.getKey());
             ob1.put("name",v.getValue());
+
             arr.put(ob1);
         });
         String s=PacksManager.getPreferedPack();
@@ -102,6 +111,7 @@ public class JavaBridge {
                 JSONObject ob1=new JSONObject();
                 ob1.put("uuid",v1.uuid);
                 ob1.put("name",v1.username);
+                ob1.put("email",v1.email);
                 arr.put(ob1);
             });
             ob.put("list",arr);
@@ -143,6 +153,8 @@ public class JavaBridge {
                 sendValue(callback,"none");
             }
         }
+        else
+            sendValue(callback,"none");
     }
     public void sendValue(int callBack,Object value)
     {
@@ -197,6 +209,12 @@ public class JavaBridge {
             }
             else
                 sendValue(callback, false);
+        });
+    }
+    public void removeAccount(String email,int callback)
+    {
+        Profiles.logout(email).thenAccept(v->{
+            sendValue(callback, v);
         });
     }
     public void openFolderOrUrl(String folder)

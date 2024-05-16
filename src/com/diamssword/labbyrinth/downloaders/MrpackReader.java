@@ -21,8 +21,7 @@ import java.util.zip.ZipFile;
 public class MrpackReader {
     public final File file;
     private JSONObject index;
-    public MrpackReader(File file)
-    {
+    public MrpackReader(File file) throws IOException {
         this.file=file;
         this.index=readPack();
 
@@ -218,7 +217,7 @@ public class MrpackReader {
         }
     }
 
-    public JSONObject readPack() {
+    public JSONObject readPack() throws IOException {
         try {
             ZipFile zip = new ZipFile(file);
             Enumeration<? extends ZipEntry> entries = zip.entries();
@@ -243,6 +242,7 @@ public class MrpackReader {
         }catch (IOException e)
         {
             System.err.println("Le .mrpack est corrompu");
+            throw e;
         }
         return null;
     }

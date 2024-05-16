@@ -61,6 +61,14 @@ public class Profiles {
         return CliInterface.login(email,call);
 
     }
+    public static CompletableFuture<Boolean> logout(String email)
+    {
+        return CliInterface.logout(email).thenApply(v->{
+            setReloadNeeded();
+            return v;
+        });
+
+    }
     public static void setReloadNeeded()
     {
         needRefresh=true;

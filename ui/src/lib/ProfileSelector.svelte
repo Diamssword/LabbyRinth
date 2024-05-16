@@ -18,6 +18,10 @@
     }
     onMount(()=>{
      loadProfiles()
+     Bridge.on("updateProfiles",()=>{
+        disp("refresh")
+        loadProfiles();
+     })
     })
     $:if(selected)
     {

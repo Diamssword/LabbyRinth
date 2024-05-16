@@ -3,6 +3,7 @@ package com.diamssword.labbyrinth;
 import com.diamssword.labbyrinth.downloaders.MrpackReader;
 import com.diamssword.labbyrinth.downloaders.Utils;
 import com.diamssword.labbyrinth.downloaders.VersionChecker;
+import com.diamssword.labbyrinth.logger.Log;
 import com.diamssword.labbyrinth.utils.KeyPair;
 import com.diamssword.labbyrinth.utils.TextUtils;
 import org.apache.commons.io.FileUtils;
@@ -40,7 +41,7 @@ public class PacksManager {
                     setPreferedPack(packs.get(0).name);
                 }
                 else
-                    updatePreferredPack();
+                    updatePreferredPack(false);
             });
         } else {
             PackInstance inst=loadPackInstance(LauncherVariables.defaultPack);
@@ -56,6 +57,32 @@ public class PacksManager {
         readyListeners.forEach(c->{
             c.accept(packs);
         });
+    }
+    public static int addPackFromCode(String code)
+    {
+        if(getPack(code).isEmpty())
+        {
+            PackInstance inst=loadPackInstance(code);
+            if(inst!=null && inst.latest !=null) {
+                packs.add(inst);
+                setPreferedPack(inst.name);
+                var cache=Utils.readCommonCache();
+                if(!cache.has("packs"))
+                    cache.put("packs",new JSONArray());
+                cache.getJSONArray("packs").put(inst.name);
+                Utils.setCommonCache(cache);
+                packsDisplay=new Vector<KeyPair>(packs.stream().map(v->new KeyPair(v.name, TextUtils.capitalizeWords(v.name().replaceAll("-"," ").replaceAll("_"," ")))).toList());
+                readyListeners.forEach(c->{
+                    c.accept(packs);
+                });
+                return 1;
+            }
+            else
+                return -1;
+        } else {
+           return 0;
+
+        }
     }
     public static Vector<KeyPair> getDisplayList()
     {
@@ -77,7 +104,7 @@ public class PacksManager {
     {
         Utils.setCommonCache(Utils.readCommonCache().put("defaultPack",packName));
         if(!isLocked())
-            updatePreferredPack();
+            updatePreferredPack(false);
 
 
     }
@@ -106,12 +133,12 @@ public class PacksManager {
         }
 
     }
-    public static void updatePreferredPack()
+    public static void updatePreferredPack(boolean force)
     {
         isLocked=true;
         updatedListeners.forEach(c->c.accept(isLocked));
         getPack(getPreferedPack()).ifPresentOrElse(p->{
-            if((p.version==null && p.latest!=null) ||(p.latest!=null && VersionChecker.shouldUpdate(p.latest.getKey(),p.version)))
+            if(force || (p.version==null && p.latest!=null) ||(p.latest!=null && VersionChecker.shouldUpdate(p.latest.getKey(),p.version)))
             {
                 new Thread(()->{
                 try {
@@ -119,12 +146,12 @@ public class PacksManager {
                     reader.updateOrInstall(p.name, p.latest.getKey());
                     packs.remove(p);
                     packs.add(new PackInstance(p.name,p.latest.getKey(),p.latest,false));
-
                     isLocked=false;
                     updatedListeners.forEach(c->c.accept(isLocked));
                     reader.file.delete();
                 }catch (IOException e){
                     Main.logger.warning(e.toString());
+                    Log.setProgress("Erreur de chargement: "+p.name,0);
                     isLocked=false;
                     updatedListeners.forEach(c->c.accept(isLocked));
 

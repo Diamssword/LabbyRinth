@@ -117,6 +117,31 @@ public class CliInterface {
         }
         return CompletableFuture.supplyAsync(()->false);
     }
+    public static CompletableFuture<Boolean> logout(String username)
+    {
+        try {
+            return executeOpenMC("--output","machine","logout",username).thenApply(r->{
+                if(r.error !=null)
+                {
+                    return false;
+                }
+                else {
+                    String[] sp =r.result.split("\n");
+                    for(String s : sp)
+                    {
+                        if(s.startsWith("task:FAILED"))
+                            return false;
+                        else if(s.startsWith("task:OK"))
+                            return true;
+                    }
+                    return true;
+                }
+            });
+        } catch (IOException | InterruptedException e) {
+            logger.warning(e.toString());
+        }
+        return CompletableFuture.supplyAsync(()->false);
+    }
     public static CompletableFuture<ProcessResult> executeOpenMC(String... args) throws IOException, InterruptedException {
         return executeOpenMC(null,args);
     }

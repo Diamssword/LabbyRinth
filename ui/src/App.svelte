@@ -20,7 +20,8 @@
     var status="Prêt au lancement!";
     var ready=false;
     Bridge.on("bridgeReady",onReady)
-   // setTimeout(onReady,2000)
+    if(import.meta.env.MODE=="development")
+      setTimeout(onReady,100)
     function onReady()
     {
       init();
