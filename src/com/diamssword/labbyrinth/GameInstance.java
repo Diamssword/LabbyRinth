@@ -73,7 +73,7 @@ public class GameInstance {
             var ram=4;
             JSONObject ob=Utils.readCommonCache();
             if(ob.has("ram"))
-                Math.max(1,Utils.readCommonCache().getInt("ram"));
+               ram= Math.max(1,Utils.readCommonCache().getInt("ram"));
             cmd.add("start");
             String jv="-Xmx"+ram+"G";
             if(ob.has("javaArgs"))
