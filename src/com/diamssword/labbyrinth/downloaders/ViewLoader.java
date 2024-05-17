@@ -41,7 +41,7 @@ static File path=new File(LauncherVariables.gameDirectory,"view");
     public static boolean onlineLoad(boolean force)
     {
         try {
-           KeyPair v= VersionChecker.getLatestVersion("ui").get();
+           KeyPair v= VersionChecker.getLatestVersion(LauncherVariables.ui_name).get();
            if(v !=null)
            {
                if(force || VersionChecker.shouldUpdate(v.getKey(),Utils.getUIVersion()))

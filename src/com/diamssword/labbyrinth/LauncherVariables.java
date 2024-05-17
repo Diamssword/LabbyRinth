@@ -7,6 +7,7 @@ public class LauncherVariables {
     public static String gameDirectory=System.getenv("appdata")+"\\.labbyrinth";
     public static String version="0.0.1";
     public static boolean devMode=true;
+    public static String ui_name="ui";
     public static String updateUrl ="http://localhost:3000";
     public static String defaultPack ="green_resurgence";
     public static File getPackFolder(String packname)
@@ -30,6 +31,8 @@ public class LauncherVariables {
                         defaultPack = var[1];
                     if (var[0].equals("version"))
                         version=var[1];
+                    if (var[0].equals("ui_name"))
+                        ui_name=var[1];
                 }
             }
         }catch (NullPointerException e)
