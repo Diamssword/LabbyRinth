@@ -82,6 +82,12 @@ public class Server
     }).start();
 
   }
+  public static int getPort()
+  {
+    if(server!=null)
+      return server.getAddress().getPort();
+    return -1;
+  }
   public static void start(String[] a) throws java.io.IOException
   {
     args(a);

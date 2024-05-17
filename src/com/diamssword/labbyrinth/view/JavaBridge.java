@@ -205,7 +205,6 @@ public class JavaBridge {
                 ConsoleGui.showConsole();
             else
                 ConsoleGui.hideConsole();
-
         }
         if(res.has("disableMaj"))
             cache.put("disableMaj",res.getBoolean("disableMaj"));

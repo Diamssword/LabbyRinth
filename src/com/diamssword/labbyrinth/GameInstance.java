@@ -1,6 +1,7 @@
 package com.diamssword.labbyrinth;
 
 import com.diamssword.labbyrinth.downloaders.Utils;
+import com.diamssword.labbyrinth.view.WebGui;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
@@ -86,10 +87,16 @@ public class GameInstance {
             ProcessBuilder builder = new ProcessBuilder(cmd);//.redirectErrorStream(true);
          //   builder.inheritIO();
             Process process=builder.start();
+            if(Utils.readCommonCache().optBoolean("hide",false))
+                WebGui.show(false);
             forwardStream(process.getInputStream(),System.out);
             forwardStream(process.getErrorStream(),System.err);
 
-            process.onExit().thenAccept(onExit);
+            process.onExit().thenAccept((p)->{
+                WebGui.show(true);
+
+                onExit.accept(p);
+            });
             process.waitFor();
 
 
