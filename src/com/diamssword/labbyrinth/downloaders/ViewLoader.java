@@ -51,6 +51,7 @@ static File path=new File(LauncherVariables.gameDirectory,"view");
                    VersionChecker.downloadUpdate(v.getValue(),f1);
                    FileUtils.deleteDirectory(path);
                    unzip(f1);
+                   f1.delete();
                    var cache=Utils.readCommonCache();
                    cache.put("ui_version",v.getKey());
                    Utils.setCommonCache(cache);
@@ -88,7 +89,6 @@ static File path=new File(LauncherVariables.gameDirectory,"view");
                 }
             }
             zip.close();
-            f.delete();
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Le .zip est corrompu");

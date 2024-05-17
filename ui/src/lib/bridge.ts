@@ -120,7 +120,7 @@ export const Bridge= {
     {
         let prom=AndroidPromiser<string>();
         window.bridge.getSettings(prom.id);
-        return JSON.parse(await prom.callback) as {ram:number,maxRam:number,javaArgs:string};
+        return JSON.parse(await prom.callback) as {ram:number,maxRam:number,javaArgs:string,console:boolean,hide:boolean,disableMaj:boolean};
     },
     async addAccount(email:string)
     {

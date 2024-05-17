@@ -8,7 +8,7 @@ export default defineConfig({
   build:{},
   plugins: [svelte(),zipPack({
     //outDir:"../assets/view",
-    outDir:"../"
+    outDir:".."
 
   })],
 });

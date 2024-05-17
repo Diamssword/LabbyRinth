@@ -1,8 +1,10 @@
 package com.diamssword.labbyrinth;
 
+import com.diamssword.labbyrinth.downloaders.Utils;
 import com.diamssword.labbyrinth.downloaders.VersionChecker;
 import com.diamssword.labbyrinth.downloaders.ViewLoader;
 import com.diamssword.labbyrinth.logger.Log;
+import com.diamssword.labbyrinth.view.ConsoleGui;
 import com.diamssword.labbyrinth.view.SplashGui;
 import com.diamssword.labbyrinth.view.WebGui;
 
@@ -16,13 +18,17 @@ import static javafx.application.Application.launch;
 
 
 public class Main {
-    public static final Logger logger = Logger.getLogger(Main.class.getName());
+    public static Logger logger = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
                 LauncherVariables.loadVars();
                 System.setProperty("log4jLauncherRoot", LauncherVariables.gameDirectory+"/launcher_logs.txt");
 
                 logger.info("Starting LabbyRinth");
+                if(Utils.readCommonCache().optBoolean("console",false))
+                {
+                    ConsoleGui.showConsole();
+                }
                 SplashGui.create();
                 CompletableFuture<Boolean> f=CliInterface.verifyCLI();
                 f.exceptionally(t -> {

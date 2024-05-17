@@ -5,7 +5,10 @@ import { Bridge } from "./Bridge";
 export const settings=writable({
     ram:4,
     maxRam:32,
-    javaArgs:""
+    javaArgs:"",
+    console:false,
+    hide:false,
+    disableMaj:false,
 })
 export function loadSettings()
 {

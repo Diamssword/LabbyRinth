@@ -183,6 +183,9 @@ public class JavaBridge {
         res.put("ram",cache.optInt("ram",4));
         res.put("maxRam", TextUtils.getRam());
         res.put("javaArgs",cache.optString("javaArgs",""));
+        res.put("hide",cache.optBoolean("hide",false));
+        res.put("console",cache.optBoolean("console",false));
+        res.put("disableMaj",cache.optBoolean("disableMaj",false));
         sendValue(callback,res);
     }
     public void setSettings(String json)
@@ -193,7 +196,20 @@ public class JavaBridge {
             cache.put("ram",res.getInt("ram"));
         if(res.has("javaArgs"))
             cache.put("javaArgs",res.getString("javaArgs"));
-       Utils.setCommonCache(cache);
+        if(res.has("hide"))
+            cache.put("hide",res.getBoolean("hide"));
+        if(res.has("console")) {
+            var b=res.getBoolean("console");
+            cache.put("console", b);
+            if(b)
+                ConsoleGui.showConsole();
+            else
+                ConsoleGui.hideConsole();
+
+        }
+        if(res.has("disableMaj"))
+            cache.put("disableMaj",res.getBoolean("disableMaj"));
+        Utils.setCommonCache(cache);
     }
     public void addAccount(String email,int callback)
     {

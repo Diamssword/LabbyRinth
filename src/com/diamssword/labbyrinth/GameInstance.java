@@ -82,18 +82,26 @@ public class GameInstance {
             cmd.add(getVersionCmd());
             cmd.add("-l");
             cmd.add("\""+user+"\"");
-            System.out.println("Running :" + Arrays.toString(cmd.toArray()));
+            Main.logger.info("Launching :" + Arrays.toString(cmd.toArray()));
             ProcessBuilder builder = new ProcessBuilder(cmd);//.redirectErrorStream(true);
-            builder.inheritIO();
+         //   builder.inheritIO();
             Process process=builder.start();
-       //     ConsoleGui.pipeOutput(process.getInputStream(),process.getErrorStream());
-       //     process.getOutputStream().close();
+            forwardStream(process.getInputStream(),System.out);
+            forwardStream(process.getErrorStream(),System.err);
+
             process.onExit().thenAccept(onExit);
             process.waitFor();
 
 
         } catch (Exception  e) {
             throw new RuntimeException(e);
+        }
+    }
+    public static void forwardStream(InputStream inputStream, PrintStream outputStream) throws IOException {
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, bytesRead);
         }
     }
 }
