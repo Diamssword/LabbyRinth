@@ -124,7 +124,6 @@ public class PacksManager {
             }
             GameInstance inst=new GameInstance(getPreferedPack(),type,infos.getString("minecraft"),subVersion);
             new Thread(()-> inst.start(Profiles.getSelectedProfile().get().email,(p)->{
-
                 isLocked=false;
                 updatedListeners.forEach(c->c.accept(isLocked));
             })).start();

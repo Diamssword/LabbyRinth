@@ -2,14 +2,19 @@ package com.diamssword.labbyrinth.view;
 
 import com.diamssword.labbyrinth.Main;
 import com.diamssword.labbyrinth.logger.TextAreaOutputStream;
+import javafx.scene.image.Image;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.Document;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 public class ConsoleGui extends JPanel{
@@ -23,6 +28,11 @@ public class ConsoleGui extends JPanel{
         frame=new JFrame();
         var gui=new ConsoleGui();
         frame.setContentPane(gui);
+        try {
+            frame.setIconImage(ImageIO.read(Objects.requireNonNull(WebGui.class.getResourceAsStream("/images/console.png"))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         frame.pack();
         frame.setTitle("Console");
         frame.setSize(960, 600);
