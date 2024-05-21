@@ -1,7 +1,9 @@
 package com.diamssword.labbyrinth;
 
 import com.diamssword.labbyrinth.downloaders.Utils;
+import com.diamssword.labbyrinth.logger.GameDownloadStream;
 import com.diamssword.labbyrinth.view.WebGui;
+import org.apache.commons.io.input.TeeInputStream;
 import org.jetbrains.annotations.Nullable;
 import org.json.JSONObject;
 
@@ -91,7 +93,6 @@ public class GameInstance {
                 WebGui.show(false);
             forwardStream(process.getInputStream(),System.out);
             forwardStream(process.getErrorStream(),System.err);
-
             process.onExit().thenAccept((p)->{
                 WebGui.show(true);
 
@@ -105,10 +106,12 @@ public class GameInstance {
         }
     }
     public static void forwardStream(InputStream inputStream, PrintStream outputStream) throws IOException {
+        var str=new GameDownloadStream();
         byte[] buffer = new byte[1024];
         int bytesRead;
         while ((bytesRead = inputStream.read(buffer)) != -1) {
             outputStream.write(buffer, 0, bytesRead);
+            str.write(buffer,0,bytesRead);
         }
     }
 }
