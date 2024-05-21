@@ -3,4 +3,4 @@ ui_name=ui
 gameDirectory=.labbyrinth
 updateUrl=https://modpack.diamssword.com
 defaultPack=green_resurgence
-devMode=true
+devMode=false

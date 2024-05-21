@@ -40,14 +40,12 @@ public class Main {
                     logger.log(Level.SEVERE,"Can't find or update portablemc , game can't be launched");
                 }
                 else {
-
                     Log.setProgress("Lancement de LabbyRinth",100);
-
                     ViewLoader.load();
-                    new Thread(PacksManager::load).start();
                     //new Thread(VersionChecker::updateLauncher).start();
-                    WebGui.start(args);
-//                    MainGui.create();
+                    WebGui.start((v)->{
+                        new Thread(PacksManager::load).start();
+                    },args);
                 }
 
        // new GameInstance("green_resurgence",GameInstance.LoaderType.fabric,"1.20.1").start("hdiamssword@gmail.com");

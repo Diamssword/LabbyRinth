@@ -18,6 +18,7 @@ import netscape.javascript.JSObject;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 public class WebGui extends Application {
@@ -49,8 +50,10 @@ public class WebGui extends Application {
 
         }
     }
-    public static void start(String... args)
+    private static Consumer<Void> readyListener;
+    public static void start(Consumer<Void> onReady, String... args)
     {
+        readyListener=onReady;
         launch(args);
     }
     @Override
@@ -81,13 +84,16 @@ public class WebGui extends Application {
         primaryStage.setResizable(false);
         SplashGui.instance.close();
         primaryStage.getIcons().add(new Image(Objects.requireNonNull(WebGui.class.getResourceAsStream("/images/logo.png"))));
-        primaryStage.show();
+        primaryStage.setOnShown(ev->{
+            if(readyListener!=null)
+                readyListener.accept(null);
+        });
         primaryStage.setOnHidden(event -> {
            Server.stop();
            if(!wasCloseBySettings)
                System.exit(1);
         });
-
+        primaryStage.show();
     }
 
 }
