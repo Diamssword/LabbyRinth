@@ -138,6 +138,9 @@ public class PacksManager {
         isLocked=true;
         updatedListeners.forEach(c->c.accept(isLocked));
         getPack(getPreferedPack()).ifPresentOrElse(p->{
+            if(!force && Utils.readCommonCache().optBoolean("disableMaj",false))
+                return;
+
             if(force || (p.version==null && p.latest!=null) ||(p.latest!=null && VersionChecker.shouldUpdate(p.latest.getKey(),p.version)))
             {
                 new Thread(()->{

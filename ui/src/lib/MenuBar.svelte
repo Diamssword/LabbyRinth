@@ -7,7 +7,7 @@
     import { Bridge } from './Bridge';
     import ListeProfiles from './ListeProfile.svelte';
     import ListePacks from './ListePacks.svelte';
-  let hidden2 = false;
+  let hidden2 = true;
   let spanClass = 'flex-1 ms-3 whitespace-nowrap';
   
   //setTimeout(() => hidden2=false, 100);
@@ -22,10 +22,11 @@
   var openProfiles=false
   var openPacks=false
   var checkedConsole=!$settings.disableMaj;
-  $:if(checkedConsole)
+  $:if($settings.disableMaj !=null)
   {
-    $settings.disableMaj=!checkedConsole;
+    checkedConsole=!$settings.disableMaj;
   }
+  
   </script>
 <div class="text-center">
   <Button pill class="rounded-l-lg absolute left-0 top-3" on:click={() => (hidden2 = false)}><Cog/></Button>
@@ -70,7 +71,7 @@
           <Toggle class=cursor-pointer bind:checked={$settings.console}>Montrer Console</Toggle>
         </div>
         <div class="ml-3 mb-3">
-          <Toggle class=cursor-pointer bind:checked={checkedConsole} >MaJ Automatiques</Toggle>
+          <Toggle class=cursor-pointer   checked={checkedConsole} on:click={()=>$settings.disableMaj=!$settings.disableMaj} >MaJ Automatiques</Toggle>
         </div>
       </SidebarGroup>
       
