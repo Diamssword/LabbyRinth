@@ -26,6 +26,7 @@
             else
             avatar="data:image/png;base64,"+v;
         })
+        Bridge.selectPack(selected)
     }
     let selected:string|undefined;
   var profiles:{value:string,name:string}[] = [];
@@ -36,7 +37,7 @@
     <Card horizontal class="space-x-1 md:p-4 bg-gray-600 border-gray-800 w-full">
         
         <Avatar rounded src={avatar} class="h-14 w-14 self-center bg-transparent"/>
-      <Select items={profiles} disabled={!isReady} bind:value={selected} placeholder="" class="h-12 self-center" on:change={()=>{}} ></Select>
+      <Select items={profiles} disabled={!isReady} bind:value={selected} placeholder="" class="h-12 self-center" ></Select>
     
     </Card>
     

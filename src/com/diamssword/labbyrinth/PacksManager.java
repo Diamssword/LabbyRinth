@@ -118,9 +118,17 @@ public class PacksManager {
             JSONObject infos=pack.getJSONObject("dependencies");
             GameInstance.LoaderType type= GameInstance.LoaderType.vanilla;
             String subVersion=null;
-            if(infos.has("fabric-loader")) {
+            if(infos.has("forge")) {
+                type = GameInstance.LoaderType.forge;
+                subVersion=infos.getString("forge");
+            }
+            else if(infos.has("fabric-loader")) {
                 type = GameInstance.LoaderType.fabric;
                 subVersion=infos.getString("fabric-loader");
+            }
+            else if(infos.has("neo-forge")) {
+                type = GameInstance.LoaderType.neoforge;
+                subVersion=infos.getString("neo-forge");
             }
             GameInstance inst=new GameInstance(getPreferedPack(),type,infos.getString("minecraft"),subVersion);
             new Thread(()-> inst.start(Profiles.getSelectedProfile().get().email,(p)->{

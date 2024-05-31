@@ -73,8 +73,8 @@ public class FileDownloader {
 			totalBytesRead += bytesRead;
 			percentage.accept((int)(((float)totalBytesRead/total)*100f));
 		}
-
-		percentage.accept((int)(totalBytesRead/total)*100);
+		if(total>0)
+			percentage.accept((int)(totalBytesRead/total)*100);
 		writer.close();
 		inputStream.close();
 		return totalBytesRead>=total;

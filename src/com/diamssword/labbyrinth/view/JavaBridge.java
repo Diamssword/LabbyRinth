@@ -96,8 +96,7 @@ public class JavaBridge {
         sendValue(callback,ob);
     }
     public void selectPack(String name)
-    {
-        PacksManager.setPreferedPack(name);
+    {PacksManager.setPreferedPack(name);
     }
     public void selectProfile(String uuid)
     {
